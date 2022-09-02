@@ -1,0 +1,23 @@
+create table cars(
+    id serial primary key,
+    model varchar(255),
+    color varchar(255),
+    year int,
+    country varchar(255),
+    number_doors int
+);
+
+insert into cars (model, color, year, country, number_doors) 
+values ('BMW', 'black', 2021, 'Germany', 4);
+
+insert into cars (model, color, year, country, number_doors) 
+values ('Hunda', 'white', 2019, 'Japan', 4);
+
+insert into cars (model, color, year, country, number_doors) 
+values ('Toyota', 'silver', 2022, 'Korea', 4);
+
+select * from cars;
+
+select * from cars
+where number_doors = 2
+and country = 'Ghana';
