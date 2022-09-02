@@ -20,4 +20,7 @@ select * from cars;
 
 select * from cars
 where number_doors = 2
-and country = 'Ghana';
+and country = 'Korea';
+
+select * from cars
+where country = 'Korea';

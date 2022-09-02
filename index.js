@@ -1,14 +1,16 @@
-const dotenv = require("dotenv");
+const dotenv = require("dotenv"); //Importing dotenv for processing .env-files
 dotenv.config();
-const express = require("express");
 
-const { Pool } = require("PG");
+const express = require("express"); //Importing express
 
-const app = express();
-app.use(express.json());
+const { Pool } = require("pg"); //Destructured Pool via "required-PG"
 
-const port = process.env.PORT || 8080;
+const app = express(); //Creating the App
+app.use(express.json()); //Middleware for processing JSON Objects
 
+const port = process.env.PORT || 8080; //Server Port
+
+//Database Pool
 const pool = new Pool({
   host: process.env.PG_HOST,
   database: process.env.PG_DATABASE,
@@ -19,15 +21,18 @@ const pool = new Pool({
   ssl: { rejectUnauthorized: false },
 });
 
+//Homepage
 app.get("/", (req, res) => {
   res.send(`<h1>Buy a Car</h1>`);
 });
 
+//Fetching data through url
 app.get("/car", (req, res) => {
   pool
     .query("SELECT * FROM cars;")
+    //Error handling
     .then((data) => {
-      res.json(data);
+      res.send(data.rows);
     })
     .catch((err) => {
       res.status(400).send({
@@ -40,7 +45,8 @@ app.get("/car", (req, res) => {
 app.get("/car/:id", (req, res) => {
   const { id } = req.params;
   pool
-    .query("SELECT * FROM users WHERE id=$1;", [id])
+    .query("SELECT * FROM cars WHERE id=$1;", [id])
+    //Error handling
     .then((data) => {
       res.json(data.rows);
     })
@@ -51,6 +57,7 @@ app.get("/car/:id", (req, res) => {
     });
 });
 
+//Posting or Creating data
 app.post("/car", (req, res) => {
   console.log(req.body);
   pool
@@ -67,6 +74,7 @@ app.post("/car", (req, res) => {
         req.body.numberOfDoors,
       ]
     )
+    //Error handling
     .then((data) => {
       res.status(201).send(data);
     })
